@@ -1,0 +1,2003 @@
+<!DOCTYPE html>
+<html lang=“en”>
+<head>
+  <meta charset="utf-8">
+  <title>Testify Samples — India's Smart Gateway to Scientific Testing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dw901SwHSR2E6g&amp;callback=initMap"></script>
+  <style>
+    :root{
+      --blue:#0B6EEF; --blue-700:#0A5BD1; --bg:#f6f9ff; --yellow:#FFC43D;
+      --ring: 0 10px 30px rgba(11,110,239,0.16);
+    }
+    html,body{ background: radial-gradient(1200px 600px at 80% -10%, rgba(11,110,239,0.08), transparent 60%), var(--bg); color:#0f172a }
+    .container{ max-width: 1200px }
+    .glass{ background: rgba(255,255,255,0.9); backdrop-filter: blur(8px) }
+    .card{ background:#fff; border:1px solid rgba(2,6,23,0.06); border-radius:20px; box-shadow: 0 10px 30px rgba(2,6,23,0.04) }
+    .btn-primary{ background: var(--blue); color:#fff; box-shadow: var(--ring) }
+    .btn-primary:hover{ background: var(--blue-700) }
+    .btn-soft{ background:#fff; border:1px solid rgba(2,6,23,0.08) }
+    .btn-soft[disabled]{ opacity:.5; cursor:not-allowed }
+    .tile{ background:#f1f6ff; border:1px solid rgba(11,110,239,0.15) }
+    .chip{ background:#fff; border:1px solid rgba(2,6,23,0.08); border-radius:999px; padding:6px 12px }
+    .badge{ background:#fff7e6; color:#8a5300; border:1px solid #ffe0a3; border-radius:999px; padding:6px 10px; font-size:12px }
+    .progress{ height:10px; background:#eaf1ff; border-radius:999px; overflow:hidden }
+    .progress>span{ display:block; height:100%; width:0%; background: linear-gradient(90deg, #22c55e, #0ea5e9); transition: width .7s ease }
+    .map{ background: linear-gradient(180deg,#e9f2ff, #f7fbff); position:relative; overflow:hidden; border-radius:16px; border:1px solid rgba(2,6,23,0.08) }
+    .pin{ width:10px; height:10px; background: var(--yellow); border-radius:50%; box-shadow: 0 0 0 6px rgba(255,196,61,0.18) }
+    .divider{ height:1px; background:linear-gradient(90deg, transparent, rgba(2,6,23,0.08), transparent) }
+    .phone{ width:290px; max-width:80vw; aspect-ratio:9/19; border-radius:26px; border:10px solid #0b1f3a; background:#0b1f3a; position:relative; overflow:hidden; box-shadow:0 20px 60px rgba(2,6,23,0.22) }
+    .phone .screen{ position:absolute; inset:14px; border-radius:18px; background:#f7faff; border:1px solid rgba(2,6,23,0.08); overflow:hidden }
+    .nav-link{ position:relative }
+    .nav-link:after{ content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px; background:transparent; transition:.2s }
+    .nav-link:hover:after{ background: var(--blue) }
+    .cta-glow{ box-shadow: 0 14px 30px rgba(11,110,239,0.22), 0 6px 14px rgba(255,196,61,0.22) }
+    .reveal{ opacity:0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease }
+    .reveal.visible{ opacity:1; transform: translateY(0) }
+    .active-step{ background:#eef5ff !important; border-color: var(--blue) !important }
+    .flat-ico{ height:42px; width:42px; display:grid; place-items:center; background:#fff; border:1px solid rgba(2,6,23,0.08); border-radius:12px }
+    .titlebar{ background: linear-gradient(135deg, #0B6EEF, #3b82f6); border-bottom: 3px solid #0A5BD1; color: white; }
+    .titlebar .wave{ position:absolute; inset-x:0; bottom:-1px; height:16px; background: radial-gradient(40px 12px at 20px 8px, rgba(255,255,255,0.1) 60%, transparent 61%) repeat-x; background-size: 40px 12px; opacity:.7 }
+    .ethics{ background:#eff8ff; border:1px solid #cfe7ff; color:#0b3a7a }
+    .cat-label{ font-size:12px; color:#2563eb; background:#eaf1ff; padding:4px 10px; border-radius:999px; border:1px solid #cfe0ff }
+    .price{ color:#0b1324 }
+    .auth-badge{ background:#e8fff3; color:#065f46; border:1px solid #bbf7d0; font-size:11px; padding:4px 8px; border-radius:999px }
+    .google-map{ height: 400px; width: 100%; border-radius: 16px; }
+    .location-status{ background: #dcfce7; border: 1px solid #bbf7d0; color: #166534; padding: 8px 12px; border-radius: 8px; font-size: 12px; }
+    .mobile-view{ display: none; }
+    .desktop-view{ display: block; }
+    
+    @media (max-width: 768px) {
+      .mobile-view{ display: block; }
+      .desktop-view{ display: none; }
+      .container{ padding: 0 16px; }
+      .card{ padding: 20px; }
+      .phone{ width: 200px; }
+    }
+    
+    .order-card{ transition: all 0.3s ease; }
+    .order-card:hover{ transform: translateY(-2px); box-shadow: 0 20px 40px rgba(2,6,23,0.08); }
+    .accept-btn{ background: #22c55e; color: white; }
+    .accept-btn:hover{ background: #16a34a; }
+    .reject-btn{ background: #ef4444; color: white; }
+    .reject-btn:hover{ background: #dc2626; }
+    .processing{ opacity: 0.6; pointer-events: none; }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="antialiased"><!-- Header -->
+  <header class="sticky top-0 z-40 glass border-b border-slate-100">
+   <div class="titlebar relative">
+    <div class="container mx-auto px-5 py-2 flex items-center justify-between">
+     <div class="flex items-center gap-2 text-sm"><span class="text-white font-semibold">Testify Samples</span> <span class="hidden sm:inline text-blue-100">•</span> <span class="hidden sm:inline text-blue-100">India's Smart Gateway to Scientific Testing</span>
+     </div>
+     <div class="text-xs text-blue-100">
+      Trusted by scholars • Ethical by design
+     </div>
+    </div>
+    <div class="wave"></div>
+   </div>
+   <div class="container mx-auto px-5 py-4 flex items-center justify-between"><a href="#" class="flex items-center gap-3">
+     <div class="h-10 w-10 rounded-xl bg-white border border-slate-200 grid place-items-center"><!-- Logo Placeholder - Replace with your "Testify Samples logo" file --> <!-- To use your logo: <img src="path/to/Testify Samples logo.png" alt="Testify Samples" class="h-8 w-8 object-contain"> -->
+      <svg width="32" height="32" viewbox="0 0 100 100" aria-label="Testify Samples logo"><defs>
+        <lineargradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+         <stop offset="0%" stop-color="#0B6EEF" />
+         <stop offset="50%" stop-color="#3b82f6" />
+         <stop offset="100%" stop-color="#0ea5e9" />
+        </lineargradient>
+        <filter id="glow">
+         <fegaussianblur stddeviation="3" result="coloredBlur" />
+         <femerge>
+          <femergenode in="coloredBlur" />
+          <femergenode in="SourceGraphic" />
+         </femerge>
+        </filter>
+       </defs> <circle cx="50" cy="50" r="45" fill="url(#logoGrad)" stroke="#fff" stroke-width="2" filter="url(#glow)" /> <path d="M30 35h40M50 35v30M35 55h30" stroke="#fff" stroke-width="4" stroke-linecap="round" /> <circle cx="50" cy="25" r="3" fill="#FFC43D" /> <circle cx="25" cy="50" r="2" fill="#FFC43D" /> <circle cx="75" cy="50" r="2" fill="#FFC43D" /> <text x="50" y="75" text-anchor="middle" fill="#fff" font-size="8" font-weight="bold">
+        AI
+       </text>
+      </svg>
+     </div>
+     <div class="leading-tight">
+      <p class="font-semibold text-slate-900">Testify Samples</p>
+      <p class="text-[11px] text-slate-500 -mt-0.5">Empowering Research. Simplifying Testing</p>
+     </div></a>
+    <nav class="hidden md:flex items-center gap-6 text-sm text-slate-700"><a href="#choose" class="nav-link">Choose Test</a> <a href="#labs" class="nav-link">Find a Lab</a> <a href="#pickup" class="nav-link">Pickup</a> <a href="#results" class="nav-link">Results</a> <a href="#payments" class="nav-link">Payments</a> <a href="#expert" class="nav-link">Expert Help</a> <a href="#about" class="nav-link">About</a>
+    </nav>
+    <div class="hidden sm:flex items-center gap-3">
+     <div class="relative"><!-- Login Button (shown when not logged in) --> <button id="loginBtn" class="btn-primary px-4 py-2 rounded-xl font-semibold flex items-center gap-2">
+       <svg width="16" height="16" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" /> <polyline points="10,17 15,12 10,7" /> <line x1="15" y1="12" x2="3" y2="12" />
+       </svg> Login </button> <!-- Profile Circle (shown when logged in as researcher) --> <button id="profileBtn" class="hidden h-10 w-10 rounded-full bg-blue-500 text-white font-semibold text-sm hover:bg-blue-600 transition-colors flex items-center justify-center"> G </button> <!-- Login Dropdown -->
+      <div id="loginDropdown" class="hidden absolute top-full right-0 mt-2 w-64 bg-white border border-slate-200 rounded-xl shadow-lg z-50">
+       <div class="p-3"><button id="researcherLogin" class="w-full text-left p-3 rounded-lg hover:bg-slate-50 flex items-center gap-3">
+         <div class="h-8 w-8 rounded-lg bg-blue-100 grid place-items-center">
+          <svg width="16" height="16" viewbox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" />
+          </svg>
+         </div>
+         <div>
+          <p class="font-semibold text-slate-900">Researcher/Institution</p>
+          <p class="text-xs text-slate-500">Book and track tests</p>
+         </div></button> <button id="labLogin" class="w-full text-left p-3 rounded-lg hover:bg-slate-50 flex items-center gap-3">
+         <div class="h-8 w-8 rounded-lg bg-green-100 grid place-items-center">
+          <svg width="16" height="16" viewbox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M9 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-4" /> <path d="M9 7v4" /> <path d="M15 7v4" /> <path d="M12 7v4" /> <path d="M7 7h10" />
+          </svg>
+         </div>
+         <div>
+          <p class="font-semibold text-slate-900">Laboratory Login</p>
+          <p class="text-xs text-slate-500">Manage orders &amp; results</p>
+         </div></button>
+       </div>
+      </div><!-- Profile Dropdown -->
+      <div id="profileDropdown" class="hidden absolute top-full right-0 mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-lg z-50">
+       <div class="p-3">
+        <div class="flex items-center gap-3 p-3 border-b border-slate-100">
+         <div class="h-10 w-10 rounded-full bg-blue-500 text-white font-semibold flex items-center justify-center">
+          G
+         </div>
+         <div>
+          <p class="font-semibold text-slate-900">Gourav</p>
+          <p class="text-xs text-slate-500">Researcher</p>
+         </div>
+        </div><button id="logoutBtn" class="w-full text-left p-3 rounded-lg hover:bg-slate-50 flex items-center gap-3 text-red-600">
+         <svg width="16" height="16" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /> <polyline points="16,17 21,12 16,7" /> <line x1="21" y1="12" x2="9" y2="12" />
+         </svg><span>Logout</span> </button>
+       </div>
+      </div>
+     </div>
+    </div><button id="menuBtn" class="sm:hidden h-10 w-10 grid place-items-center rounded-lg border border-slate-200">☰</button>
+   </div>
+   <div id="mobileMenu" class="hidden sm:hidden border-t border-slate-100">
+    <div class="px-5 py-3 flex flex-col gap-3 text-slate-700"><a href="#choose">Choose Test</a><a href="#labs">Find a Lab</a><a href="#pickup">Pickup</a><a href="#results">Results</a><a href="#payments">Payments</a><a href="#expert">Expert Help</a><a href="#about">About</a>
+     <div class="flex gap-3 pt-2"><button id="mobileResearcherLogin" class="btn-soft px-4 py-2 rounded-xl font-semibold text-slate-800 w-full text-center">Researcher Login</button> <button id="mobileLabLogin" class="btn-primary px-4 py-2 rounded-xl font-semibold w-full text-center">Lab Login</button>
+     </div>
+    </div>
+   </div>
+  </header><!-- Hero -->
+  <section class="container mx-auto px-5 mt-10 mb-12">
+   <div class="card p-7 sm:p-10 grid lg:grid-cols-2 gap-10 items-center">
+    <div class="space-y-6"><span class="badge inline-flex items-center gap-2">⚡ AI-Enabled • 🔍 Transparent • 🧑‍🔬 Expert-backed</span>
+     <h1 class="text-3xl sm:text-5xl font-extrabold leading-tight text-slate-900">India's Smart Gateway to Scientific Testing</h1>
+     <p class="text-slate-600 text-lg">Connect with certified labs across India. Book tests, track samples with live GPS, get expert consultations, and receive digital reports — all through one intelligent platform.</p>
+     <div class="flex flex-wrap gap-3"><a href="#choose" class="btn-primary px-5 py-3 rounded-xl font-semibold cta-glow">Get Started</a> <a href="#about" class="btn-soft px-5 py-3 rounded-xl font-semibold">Learn More</a>
+     </div>
+     <div class="flex items-center gap-2 text-sm text-slate-500">
+      <span class="chip">AI-Powered</span><span class="chip">Live Tracking</span><span class="chip">Expert Support</span><span class="chip">Pan-India</span>
+     </div>
+    </div>
+    <div class="flex justify-center">
+     <div class="phone">
+      <div class="screen">
+       <div class="h-full p-4 flex flex-col">
+        <div class="text-xs text-slate-500 flex justify-between">
+         <span>9:41</span><span>5G · 84%</span>
+        </div>
+        <div class="mt-4 grid gap-2">
+         <div class="tile rounded-xl p-3 border flex items-center justify-between">
+          <div class="flex items-center gap-3">
+           <div class="flat-ico">
+            🧪
+           </div>
+           <div>
+            <p class="text-sm font-semibold">Select Test</p>
+            <p class="text-xs text-slate-500">FT‑IR, HPLC, UV‑Vis…</p>
+           </div>
+          </div><span class="text-blue-600 text-sm">→</span>
+         </div>
+         <div class="tile rounded-xl p-3 border flex items-center justify-between">
+          <div class="flex items-center gap-3">
+           <div class="flat-ico">
+            🏥
+           </div>
+           <div>
+            <p class="text-sm font-semibold">Choose Lab</p>
+            <p class="text-xs text-slate-500">Certified nearby</p>
+           </div>
+          </div><span class="text-blue-600 text-sm">→</span>
+         </div>
+         <div class="tile rounded-xl p-3 border flex items-center justify-between">
+          <div class="flex items-center gap-3">
+           <div class="flat-ico">
+            📍
+           </div>
+           <div>
+            <p class="text-sm font-semibold">Live Tracking</p>
+            <p class="text-xs text-slate-500">GPS enabled</p>
+           </div>
+          </div><span class="text-blue-600 text-sm">→</span>
+         </div>
+         <div class="tile rounded-xl p-3 border flex items-center justify-between">
+          <div class="flex items-center gap-3">
+           <div class="flat-ico">
+            📈
+           </div>
+           <div>
+            <p class="text-sm font-semibold">AI Results</p>
+            <p class="text-xs text-slate-500">Expert insights</p>
+           </div>
+          </div>
+         </div>
+        </div>
+        <div class="mt-auto">
+         <div class="progress">
+          <span id="heroBar"></span>
+         </div>
+         <p class="text-[11px] text-slate-500 mt-1">Your journey progress</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section><!-- Zero Manipulation Policy -->
+  <section class="container mx-auto px-5 mb-6">
+   <div class="ethics rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+     <div class="h-9 w-9 rounded-lg bg-white grid place-items-center border border-blue-100">
+      🛡️
+     </div>
+     <div>
+      <p class="font-semibold">Zero Manipulation Policy</p>
+      <p class="text-sm">We never alter your data — ethics-first results with full transparency.</p>
+     </div>
+    </div>
+    <div class="text-xs text-blue-800">
+     Independent, auditable process • Certified labs only
+    </div>
+   </div>
+  </section><!-- Choose Test note -->
+  <section class="container mx-auto px-5 -mt-4 mb-6">
+   <div class="card p-4 text-sm text-slate-600">
+    Note: Prices vary by laboratory. Select a test and lab combination to see specific pricing and sample requirements.
+   </div>
+  </section><!-- Choose Test (categorized and priced) -->
+  <section id="choose" class="container mx-auto px-5 mb-12 reveal">
+   <div class="card p-7 sm:p-10">
+    <div class="flex items-center justify-between gap-4 flex-wrap">
+     <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Choose your test</h2><span class="text-sm text-slate-600">Search or select your test instantly.</span>
+    </div>
+    <div class="mt-6 flex items-center gap-3"><input id="searchTest" placeholder="Search tests or categories (e.g., Raman, SEM, UV-Vis, Microscopic)" class="w-full sm:max-w-xl px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-200"> <button id="searchBtn" class="btn-primary px-4 py-3 rounded-xl font-semibold">Search</button> <button id="clearBtn" class="btn-soft px-4 py-3 rounded-xl font-semibold">Clear</button>
+    </div>
+    <div id="testGroups" class="mt-6 space-y-8"></div>
+    <p id="chosenInfo" class="mt-6 text-sm text-slate-600 hidden">You selected <span class="font-semibold" id="chosenName"></span>. Showing authorized labs below.</p>
+   </div>
+  </section><!-- Find a Laboratory (NCL Pune highlighted) -->
+  <section id="labs" class="container mx-auto px-5 mb-12 reveal">
+   <div class="card p-7 sm:p-10">
+    <div class="flex items-center justify-between gap-4 flex-wrap">
+     <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Find a certified laboratory</h2>
+     <div class="flex flex-wrap gap-2">
+      <span class="chip">Verified</span><span class="chip">Nearby</span><span class="chip">Trusted</span>
+     </div>
+    </div>
+    <div class="mt-6 grid lg:grid-cols-3 gap-6">
+     <div class="lg:col-span-2 map h-[320px] relative">
+      <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#0B6EEF 1px, transparent 1px); background-size: 20px 20px;"></div>
+      <div class="relative h-full w-full">
+       <div id="mapPins"></div><!-- Map controls -->
+       <div class="absolute top-3 right-3 flex flex-col gap-2"><button class="h-8 w-8 bg-white border border-slate-200 rounded-lg grid place-items-center text-sm hover:bg-slate-50">+</button> <button class="h-8 w-8 bg-white border border-slate-200 rounded-lg grid place-items-center text-sm hover:bg-slate-50">-</button>
+       </div><!-- Location labels -->
+       <div class="absolute left-[45%] top-[35%] bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs font-medium shadow-sm">
+        NCL Pune
+       </div>
+       <div class="absolute left-[65%] top-[50%] bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs font-medium shadow-sm">
+        DIYA Labs
+       </div>
+       <div class="absolute left-[35%] top-[45%] bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs font-medium shadow-sm">
+        ARI Pune
+       </div>
+       <div class="absolute inset-x-0 bottom-0 p-3">
+        <div class="glass border border-slate-200 rounded-xl p-2 text-xs text-slate-600">
+         Interactive lab locations • Click pins for details
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="space-y-3">
+      <div id="labSearchContainer" class="mb-4"><input id="labSearch" placeholder="Search labs by name or location..." class="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-200 text-sm">
+      </div>
+      <div id="allLabsList" class="space-y-3"></div><button id="bookLab" class="btn-primary w-full px-4 py-3 rounded-xl font-semibold">Select Lab &amp; Book Slot</button>
+     </div>
+    </div>
+   </div>
+  </section><!-- Sample Pickup with Live GPS Tracking -->
+  <section id="pickup" class="container mx-auto px-5 mb-12 reveal">
+   <div class="card p-7 sm:p-10">
+    <div class="grid lg:grid-cols-2 gap-8 items-center">
+     <div class="space-y-4">
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Live GPS tracking from doorstep to lab</h2>
+      <p class="text-slate-600">Real-time location updates with Google Maps integration. Track your sample every step of the way.</p><!-- Location Status -->
+      <div id="locationStatus" class="location-status">
+       📍 Getting your location...
+      </div>
+      <div class="flex items-center gap-2 text-sm">
+       <span class="chip">Scheduled</span><span class="chip">Picked Up</span><span class="chip">In Transit</span><span class="chip">Delivered</span>
+      </div>
+      <div class="mt-3 progress">
+       <span id="pickupBar"></span>
+      </div>
+      <p class="text-xs text-slate-500 mt-1">Progress: <span id="pickupLabel">Scheduled</span></p><button id="enableLocation" class="btn-primary px-4 py-2 rounded-lg font-semibold">Enable Live Tracking</button>
+     </div><!-- Google Maps Integration -->
+     <div class="space-y-4">
+      <div id="googleMap" class="google-map"></div>
+      <div class="grid grid-cols-3 gap-4 text-center">
+       <div class="card p-3">
+        <div class="flat-ico mx-auto">
+         👨‍🔬
+        </div>
+        <p class="mt-2 text-sm font-semibold">Your Location</p>
+        <p class="text-xs text-slate-500" id="userLocation">Detecting...</p>
+       </div>
+       <div class="card p-3">
+        <div class="flat-ico mx-auto" style="background:#fff7e6;border-color:#ffe0a3">
+         🚚
+        </div>
+        <p class="mt-2 text-sm font-semibold">Courier</p>
+        <p class="text-xs text-slate-500" id="courierStatus">En route</p>
+       </div>
+       <div class="card p-3">
+        <div class="flat-ico mx-auto" style="background:#eaffef;border-color:#c8f1d3">
+         🏥
+        </div>
+        <p class="mt-2 text-sm font-semibold">Lab</p>
+        <p class="text-xs text-slate-500" id="labLocation">NCL Pune</p>
+       </div>
+      </div>
+     </div>
+    </div>
+    <p class="mt-6 text-slate-600">"Real-time GPS tracking with Google Maps integration."</p>
+   </div>
+  </section><!-- Results -->
+  <section id="results" class="container mx-auto px-5 mb-12 reveal">
+   <div class="card p-7 sm:p-10">
+    <div class="grid lg:grid-cols-2 gap-8 items-center">
+     <div class="space-y-4">
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">AI-powered results with expert insights</h2>
+      <p class="text-slate-600">Get intelligent analysis and expert consultation along with your test results. Our AI helps interpret complex data.</p>
+      <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-center justify-between">
+       <div class="flex items-center gap-3">
+        <div class="flat-ico">
+         🤖
+        </div>
+        <div>
+         <p class="font-semibold">AI Analysis Complete</p>
+         <p class="text-xs text-slate-600">Expert insights ready</p>
+        </div>
+       </div><span class="text-yellow-500 font-semibold text-sm">NEW</span>
+      </div>
+      <div class="mt-4">
+       <div class="flex items-start gap-4">
+        <div class="mt-1 h-3 w-3 rounded-full bg-green-500"></div>
+        <div>
+         <p class="text-sm font-semibold">Sample Received</p>
+         <p class="text-xs text-slate-600">Verified at lab intake</p>
+        </div>
+       </div>
+       <div class="ml-1.5 border-l-2 border-dashed border-slate-200 h-6"></div>
+       <div class="flex items-start gap-4">
+        <div class="mt-1 h-3 w-3 rounded-full bg-blue-500"></div>
+        <div>
+         <p class="text-sm font-semibold">AI Analysis in Progress</p>
+         <p class="text-xs text-slate-600">Machine learning processing</p>
+        </div>
+       </div>
+       <div class="ml-1.5 border-l-2 border-dashed border-slate-200 h-6"></div>
+       <div class="flex items-start gap-4">
+        <div class="mt-1 h-3 w-3 rounded-full bg-purple-500"></div>
+        <div>
+         <p class="text-sm font-semibold">Expert Review Complete</p>
+         <p class="text-xs text-slate-600">Download with insights</p>
+        </div>
+       </div>
+      </div>
+      <p class="text-slate-600">"AI-enhanced results with expert validation."</p>
+     </div>
+     <div class="flex justify-center">
+      <div class="phone">
+       <div class="screen">
+        <div class="h-full p-4 flex flex-col">
+         <div class="flex items-center justify-between text-xs text-slate-500">
+          <span>12:27</span><span>5G · 79%</span>
+         </div>
+         <div class="mt-3 card p-3 border">
+          <div class="text-sm font-semibold">
+           AI Analysis
+          </div>
+          <div class="mt-2 progress">
+           <span id="resultBar"></span>
+          </div>
+          <p class="text-[11px] text-slate-500 mt-1">Processing → Insights</p>
+         </div>
+         <div class="mt-3 bg-white border rounded-xl p-3">
+          <p class="text-sm font-semibold">Expert Consultation</p>
+          <p class="text-xs text-slate-600">AI + Human insights ready</p>
+         </div>
+         <div class="mt-auto flex gap-2">
+          <button class="btn-primary px-3 py-2 rounded-lg text-sm">View Report</button><button class="btn-soft px-3 py-2 rounded-lg text-sm">AI Insights</button>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section><!-- Payment & Reports -->
+  <section id="payments" class="container mx-auto px-5 mb-12 reveal">
+   <div class="card p-7 sm:p-10">
+    <div class="grid lg:grid-cols-2 gap-8 items-center">
+     <div class="card p-6">
+      <div class="flex items-center justify-between">
+       <h3 class="font-bold text-slate-900">Secure Checkout</h3><span class="badge">SSL Secure</span>
+      </div>
+      <div class="divider my-4"></div>
+      <div class="grid grid-cols-2 gap-3 text-sm">
+       <div class="bg-white border rounded-xl p-3">
+        <p class="text-slate-500">Test</p>
+        <p class="font-semibold" id="summaryTest">FT‑IR</p>
+       </div>
+       <div class="bg-white border rounded-xl p-3">
+        <p class="text-slate-500">Lab</p>
+        <p class="font-semibold" id="summaryLab">National Chemical Laboratory (NCL), Pune</p>
+       </div>
+       <div class="bg-white border rounded-xl p-3">
+        <p class="text-slate-500">Turnaround</p>
+        <p class="font-semibold" id="summaryTAT">2 Days</p>
+       </div>
+       <div class="bg-white border rounded-xl p-3">
+        <p class="text-slate-500">Total</p>
+        <p class="font-semibold" id="summaryPrice">₹ 2,450</p>
+       </div>
+      </div>
+      <div class="mt-4 flex items-center gap-2">
+       <input type="checkbox" id="tos" class="h-4 w-4"><label for="tos" class="text-sm text-slate-600">I agree to the terms</label>
+      </div><button id="payBtn" class="mt-4 btn-primary w-full px-4 py-3 rounded-xl font-semibold">Pay Securely</button>
+      <p id="payStatus" class="mt-2 text-sm text-green-600 hidden">Payment successful ✔ Instant report ready.</p>
+     </div>
+     <div class="space-y-4">
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Secure payments. Instant AI reports. Expert consultations.</h2>
+      <div class="grid sm:grid-cols-2 gap-4">
+       <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
+        <div class="flat-ico">
+         📄
+        </div>
+        <p class="mt-2 font-semibold">AI-Enhanced PDF</p>
+        <p class="text-sm text-slate-600">Download with intelligent insights</p>
+        <div class="text-xs text-slate-500 mt-1">
+         Format: Results • AI Analysis • Expert Notes • Recommendations
+        </div><button id="downloadBtn" class="mt-3 btn-soft px-3 py-2 rounded-lg text-sm flex items-center gap-2" disabled> <span>📄</span> <span id="downloadText">Download (pay first)</span> </button>
+       </div>
+       <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+        <div class="flat-ico">
+         📦
+        </div>
+        <p class="mt-2 font-semibold">Hard Copy Courier</p>
+        <p class="text-sm text-slate-600">Delivered sealed to your address</p>
+        <div class="mt-3 flex items-center gap-2 text-xs text-slate-600">
+         <span class="h-2 w-2 rounded-full bg-yellow-500"></span> Out for delivery
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section><!-- Expert Assistance -->
+  <section id="expert" class="container mx-auto px-5 mb-12 reveal">
+   <div class="card p-7 sm:p-10">
+    <div class="grid lg:grid-cols-2 gap-8 items-center">
+     <div class="space-y-4">
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">AI + Human expertise for complete understanding</h2>
+      <p class="text-slate-600">Get AI-powered initial analysis followed by expert consultation to fully understand your results and next steps.</p>
+      <div class="flex gap-3">
+       <button id="expertBtn" class="btn-primary px-5 py-3 rounded-xl font-semibold">Expert Help</button><button id="videoBtn" class="btn-soft px-5 py-3 rounded-xl font-semibold">AI Analysis Demo</button>
+      </div>
+     </div>
+     <div class="card p-5">
+      <div class="bg-white border rounded-xl p-4">
+       <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+         <div class="h-10 w-10 rounded-full bg-blue-100 grid place-items-center">
+          🤖
+         </div>
+         <div>
+          <p class="font-semibold text-sm">AI + Dr. Meera (Materials)</p>
+          <p class="text-xs text-slate-500">Available now</p>
+         </div>
+        </div><span class="badge">AI-Enhanced</span>
+       </div>
+       <div class="mt-4 h-40 rounded-lg bg-gradient-to-br from-blue-100 to-white border grid place-items-center text-slate-500 text-sm">
+        Video call preview (demo)
+       </div>
+       <div class="mt-4 flex gap-2">
+        <button class="btn-primary px-4 py-2 rounded-lg text-sm">Ask AI</button><button class="btn-soft px-4 py-2 rounded-lg text-sm">Expert Call</button>
+       </div>
+      </div>
+     </div>
+    </div>
+    <p class="mt-6 text-slate-600">"AI-powered analysis with human expert validation."</p>
+   </div>
+  </section><!-- About Us -->
+  <section id="about" class="container mx-auto px-5 mb-12 reveal">
+   <div class="card p-7 sm:p-10">
+    <div class="flex items-center gap-3 mb-4">
+     <div class="flat-ico" aria-hidden="true">
+      ℹ️
+     </div>
+     <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">About Testify Samples</h2>
+    </div>
+    <div class="grid lg:grid-cols-3 gap-6 items-start">
+     <div class="lg:col-span-2 space-y-4 text-slate-700 leading-relaxed">
+      <p>Testify Samples is an AI-enabled research testing platform that connects students, researchers, and organizations with certified laboratories across India. Through a simple digital interface, users can book advanced analytical tests with doorstep sample pickup, real-time tracking, and quick digital report delivery.</p>
+      <p>We go beyond testing logistics by offering expert data interpretation and consultation, ensuring faster, clearer, and more reliable results. Our AI-powered analysis provides initial insights, while human experts validate and expand on findings.</p>
+      <p>Our mission is to make scientific testing accessible, transparent, and efficient — empowering innovation across every corner of India's research community.</p>
+      <div class="flex flex-wrap gap-2 text-sm">
+       <span class="chip">AI-Powered</span><span class="chip">Pan-India Network</span><span class="chip">Expert Consultation</span><span class="chip">Real-time Tracking</span>
+      </div>
+     </div>
+     <div class="card p-5">
+      <div class="flex items-center gap-3">
+       <div class="flat-ico">
+        🏢
+       </div>
+       <div>
+        <p class="font-semibold">HQ</p>
+        <p class="text-xs text-slate-500">Bengaluru, India</p>
+       </div>
+      </div>
+      <div class="divider my-4"></div>
+      <div class="flex items-center gap-3">
+       <div class="flat-ico">
+        🛡️
+       </div>
+       <div>
+        <p class="font-semibold">ISO‑Aligned Practices</p>
+        <p class="text-xs text-slate-500">Partner labs are certified and authorized</p>
+       </div>
+      </div>
+      <div class="divider my-4"></div>
+      <div class="flex items-center gap-3">
+       <div class="flat-ico">
+        🤖
+       </div>
+       <div>
+        <p class="font-semibold">AI‑Enhanced</p>
+        <p class="text-xs text-slate-500">Intelligent analysis with human expertise</p>
+       </div>
+      </div>
+      <div class="divider my-4"></div>
+      <div class="flex items-center gap-3">
+       <div class="flat-ico">
+        🤝
+       </div>
+       <div>
+        <p class="font-semibold">Research‑first</p>
+        <p class="text-xs text-slate-500">Empowering Research. Simplifying Testing</p>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section><!-- CTA -->
+  <section id="cta" class="container mx-auto px-5 mb-16 reveal">
+   <div class="card p-7 sm:p-10 grid lg:grid-cols-2 gap-8 items-center">
+    <div class="space-y-4">
+     <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Empowering Research. Simplifying Testing.</h2>
+     <p class="text-slate-600">Join India's smartest research testing platform. AI-powered insights, expert consultations, and seamless logistics.</p><a href="#choose" class="btn-primary px-6 py-4 rounded-2xl font-bold cta-glow inline-flex items-center gap-2">Start Your Research Journey <span class="text-yellow-300">→</span></a>
+     <div class="text-sm text-slate-600">
+      Or download the app to get started.
+     </div>
+    </div>
+    <div class="card p-6">
+     <div class="grid sm:grid-cols-2 gap-4"><a class="bg-black text-white rounded-xl p-4 flex items-center justify-center gap-3" href="#"><span class="text-2xl">📱</span>
+       <div class="leading-tight">
+        <div class="text-[10px]">
+         Download on the
+        </div>
+        <div class="font-semibold -mt-0.5">
+         App Store
+        </div>
+       </div></a> <a class="bg-black text-white rounded-xl p-4 flex items-center justify-center gap-3" href="#"><span class="text-2xl">▶</span>
+       <div class="leading-tight">
+        <div class="text-[10px]">
+         GET IT ON
+        </div>
+        <div class="font-semibold -mt-0.5">
+         Google Play
+        </div>
+       </div></a>
+     </div>
+     <div class="mt-4 text-sm text-slate-600">
+      Contact: hello@testifysamples.example • +91 98765 43210
+     </div>
+    </div>
+   </div>
+  </section><!-- Login Modals -->
+  <div id="researcherModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+   <div class="bg-white rounded-2xl max-w-md w-full p-6">
+    <div class="flex items-center justify-between mb-6">
+     <h3 class="text-xl font-bold text-slate-900">Researcher Login</h3><button id="closeResearcherModal" class="h-8 w-8 rounded-lg border border-slate-200 grid place-items-center hover:bg-slate-50">✕</button>
+    </div>
+    <form id="researcherLoginForm" class="space-y-4">
+     <div><label class="block text-sm font-medium text-slate-700 mb-2">Email</label> <input type="email" id="researcherEmail" value="gourav@example.com" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" readonly>
+     </div>
+     <div><label class="block text-sm font-medium text-slate-700 mb-2">Password</label> <input type="password" id="researcherPassword" value="demo123" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" readonly>
+     </div><button type="submit" class="w-full btn-primary px-4 py-3 rounded-xl font-semibold">Login as Researcher</button>
+    </form>
+   </div>
+  </div>
+  <div id="labModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+   <div class="bg-white rounded-2xl max-w-md w-full p-6">
+    <div class="flex items-center justify-between mb-6">
+     <h3 class="text-xl font-bold text-slate-900">Laboratory Login</h3><button id="closeLabModal" class="h-8 w-8 rounded-lg border border-slate-200 grid place-items-center hover:bg-slate-50">✕</button>
+    </div>
+    <form id="labLoginForm" class="space-y-4">
+     <div><label class="block text-sm font-medium text-slate-700 mb-2">Lab ID</label> <input type="text" id="labSampleId" value="NCL-LAB-2024" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" readonly>
+     </div>
+     <div><label class="block text-sm font-medium text-slate-700 mb-2">Password</label> <input type="password" id="labPassword" value="ncl123" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" readonly>
+     </div><button type="submit" class="w-full btn-primary px-4 py-3 rounded-xl font-semibold">Login as Laboratory</button>
+    </form>
+   </div>
+  </div><!-- Laboratory Dashboard -->
+  <div id="labDashboard" class="fixed inset-0 bg-white z-50 hidden overflow-y-auto">
+   <div class="container mx-auto px-5 py-6"><!-- Dashboard Header -->
+    <div class="flex items-center justify-between mb-8">
+     <div class="flex items-center gap-3">
+      <div class="h-12 w-12 rounded-xl bg-green-100 grid place-items-center">
+       <svg width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M9 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-4" /> <path d="M9 7v4" /> <path d="M15 7v4" /> <path d="M12 7v4" /> <path d="M7 7h10" />
+       </svg>
+      </div>
+      <div>
+       <h1 class="text-2xl font-bold text-slate-900">NCL Laboratory Dashboard</h1>
+       <p class="text-slate-600">Manage orders and upload results</p>
+      </div>
+     </div><button id="closeDashboard" class="btn-soft px-4 py-2 rounded-xl font-semibold">Close Dashboard</button>
+    </div><!-- Dashboard Navigation -->
+    <div class="flex gap-4 mb-8"><button id="ordersTab" class="btn-primary px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
+      <svg width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /> <polyline points="14,2 14,8 20,8" /> <line x1="16" y1="13" x2="8" y2="13" /> <line x1="16" y1="17" x2="8" y2="17" /> <polyline points="10,9 9,9 8,9" />
+      </svg> Orders </button> <button id="historyTab" class="btn-soft px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
+      <svg width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" /> <polyline points="12,6 12,12 16,14" />
+      </svg> Order History </button> <button id="payoutsTab" class="btn-soft px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
+      <svg width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23" /> <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+      </svg> Payouts </button>
+    </div><!-- Dashboard Content -->
+    <div id="dashboardContent"><!-- Orders Content -->
+     <div id="ordersContent" class="space-y-4">
+      <div class="order-card card p-6">
+       <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-3">
+         <div class="h-10 w-10 rounded-lg bg-blue-100 grid place-items-center">
+          <svg width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" />
+          </svg>
+         </div>
+         <div>
+          <p class="font-semibold text-slate-900">Dr. Priya Sharma</p>
+          <p class="text-sm text-slate-600">IIT Bombay</p>
+         </div>
+        </div><span class="badge">New Order</span>
+       </div>
+       <div class="grid md:grid-cols-2 gap-4 mb-4">
+        <div class="bg-slate-50 p-3 rounded-lg">
+         <p class="text-xs text-slate-500 uppercase font-semibold">Booking Time</p>
+         <p class="font-semibold">Today, 2:30 PM</p>
+        </div>
+        <div class="bg-slate-50 p-3 rounded-lg">
+         <p class="text-xs text-slate-500 uppercase font-semibold">Test Details</p>
+         <p class="font-semibold">FTIR Spectroscopy</p>
+        </div>
+        <div class="bg-slate-50 p-3 rounded-lg">
+         <p class="text-xs text-slate-500 uppercase font-semibold">Sample Quantity</p>
+         <p class="font-semibold">20 mg</p>
+        </div>
+        <div class="bg-slate-50 p-3 rounded-lg">
+         <p class="text-xs text-slate-500 uppercase font-semibold">Set Time to Perform</p><input type="datetime-local" class="w-full mt-1 px-2 py-1 border border-slate-300 rounded text-sm">
+        </div>
+       </div>
+       <div class="flex gap-3"><button class="accept-btn px-6 py-2 rounded-lg font-semibold flex-1 flex items-center justify-center gap-2" onclick="handleOrderAction(this, 'accept', 'Dr. Priya Sharma', 'FTIR Spectroscopy')">
+         <svg width="16" height="16" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12" />
+         </svg> Accept </button> <button class="reject-btn px-6 py-2 rounded-lg font-semibold flex-1 flex items-center justify-center gap-2" onclick="handleOrderAction(this, 'reject', 'Dr. Priya Sharma', 'FTIR Spectroscopy')">
+         <svg width="16" height="16" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18" /> <line x1="6" y1="6" x2="18" y2="18" />
+         </svg> Reject </button>
+       </div>
+      </div>
+      <div class="order-card card p-6">
+       <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-3">
+         <div class="h-10 w-10 rounded-lg bg-blue-100 grid place-items-center">
+          <svg width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" />
+          </svg>
+         </div>
+         <div>
+          <p class="font-semibold text-slate-900">Prof. Rajesh Kumar</p>
+          <p class="text-sm text-slate-600">IISC Bangalore</p>
+         </div>
+        </div><span class="badge">New Order</span>
+       </div>
+       <div class="grid md:grid-cols-2 gap-4 mb-4">
+        <div class="bg-slate-50 p-3 rounded-lg">
+         <p class="text-xs text-slate-500 uppercase font-semibold">Booking Time</p>
+         <p class="font-semibold">Today, 11:15 AM</p>
+        </div>
+        <div class="bg-slate-50 p-3 rounded-lg">
+         <p class="text-xs text-slate-500 uppercase font-semibold">Test Details</p>
+         <p class="font-semibold">SEM Analysis</p>
+        </div>
+        <div class="bg-slate-50 p-3 rounded-lg">
+         <p class="text-xs text-slate-500 uppercase font-semibold">Sample Quantity</p>
+         <p class="font-semibold">30 mg</p>
+        </div>
+        <div class="bg-slate-50 p-3 rounded-lg">
+         <p class="text-xs text-slate-500 uppercase font-semibold">Set Time to Perform</p><input type="datetime-local" class="w-full mt-1 px-2 py-1 border border-slate-300 rounded text-sm">
+        </div>
+       </div>
+       <div class="flex gap-3"><button class="accept-btn px-6 py-2 rounded-lg font-semibold flex-1 flex items-center justify-center gap-2" onclick="handleOrderAction(this, 'accept', 'Prof. Rajesh Kumar', 'SEM Analysis')">
+         <svg width="16" height="16" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12" />
+         </svg> Accept </button> <button class="reject-btn px-6 py-2 rounded-lg font-semibold flex-1 flex items-center justify-center gap-2" onclick="handleOrderAction(this, 'reject', 'Prof. Rajesh Kumar', 'SEM Analysis')">
+         <svg width="16" height="16" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18" /> <line x1="6" y1="6" x2="18" y2="18" />
+         </svg> Reject </button>
+       </div>
+      </div>
+     </div><!-- Order History Content -->
+     <div id="historyContent" class="hidden space-y-4">
+      <div class="card p-6">
+       <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-3">
+         <div class="h-10 w-10 rounded-lg bg-green-100 grid place-items-center">
+          <svg width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polyline points="20,6 9,17 4,12" />
+          </svg>
+         </div>
+         <div>
+          <p class="font-semibold text-slate-900">Dr. Meera Patel - XRD Analysis</p>
+          <p class="text-sm text-slate-600">Completed • 0.5g sample</p>
+         </div>
+        </div><span class="text-xs text-green-600 bg-green-50 px-2 py-1 rounded">Accepted</span>
+       </div>
+      </div>
+      <div class="card p-6">
+       <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-3">
+         <div class="h-10 w-10 rounded-lg bg-red-100 grid place-items-center">
+          <svg width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18" /> <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+         </div>
+         <div>
+          <p class="font-semibold text-slate-900">Dr. Amit Singh - NMR Analysis</p>
+          <p class="text-sm text-slate-600">Insufficient sample • 5mg provided</p>
+         </div>
+        </div><span class="text-xs text-red-600 bg-red-50 px-2 py-1 rounded">Rejected</span>
+       </div>
+      </div>
+     </div><!-- Payouts Content -->
+     <div id="payoutsContent" class="hidden space-y-4">
+      <div class="card p-6">
+       <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-3">
+         <div class="h-10 w-10 rounded-lg bg-yellow-100 grid place-items-center">
+          <svg width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23" /> <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+          </svg>
+         </div>
+         <div>
+          <p class="font-semibold text-slate-900">Dr. Priya Sharma - FTIR</p>
+          <p class="text-sm text-slate-600">₹1,000 • Paid</p>
+         </div>
+        </div>
+        <div class="flex items-center gap-3"><span class="text-xs text-green-600 bg-green-50 px-2 py-1 rounded">Paid</span> <button id="uploadResult1" class="btn-primary px-4 py-2 rounded-lg font-semibold flex items-center gap-2">
+          <svg width="16" height="16" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <polyline points="7,10 12,15 17,10" /> <line x1="12" y1="15" x2="12" y2="3" />
+          </svg> Upload Results </button>
+        </div>
+       </div>
+      </div>
+      <div class="card p-6">
+       <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-3">
+         <div class="h-10 w-10 rounded-lg bg-yellow-100 grid place-items-center">
+          <svg width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23" /> <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+          </svg>
+         </div>
+         <div>
+          <p class="font-semibold text-slate-900">Prof. Rajesh Kumar - SEM</p>
+          <p class="text-sm text-slate-600">₹7,000 • Paid</p>
+         </div>
+        </div>
+        <div class="flex items-center gap-3"><span class="text-xs text-green-600 bg-green-50 px-2 py-1 rounded">Paid</span> <button id="uploadResult2" class="btn-primary px-4 py-2 rounded-lg font-semibold flex items-center gap-2">
+          <svg width="16" height="16" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <polyline points="7,10 12,15 17,10" /> <line x1="12" y1="15" x2="12" y2="3" />
+          </svg> Upload Results </button>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div><!-- Researcher Dashboard -->
+  <div id="researcherDashboard" class="fixed inset-0 bg-white z-50 hidden overflow-y-auto">
+   <div class="container mx-auto px-5 py-6"><!-- Dashboard Header -->
+    <div class="flex items-center justify-between mb-8">
+     <div class="flex items-center gap-3">
+      <div class="h-12 w-12 rounded-xl bg-blue-100 grid place-items-center">
+       <svg width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" />
+       </svg>
+      </div>
+      <div>
+       <h1 class="text-2xl font-bold text-slate-900">Researcher Dashboard</h1>
+       <p class="text-slate-600">Track your test orders and download results</p>
+      </div>
+     </div><button id="closeResearcherDashboard" class="btn-soft px-4 py-2 rounded-xl font-semibold">Close Dashboard</button>
+    </div><!-- Test Orders -->
+    <div class="space-y-4">
+     <h2 class="text-xl font-bold text-slate-900">Your Test Orders</h2>
+     <div class="card p-6">
+      <div class="flex items-center justify-between mb-4">
+       <div>
+        <p class="font-semibold text-slate-900">FTIR Spectroscopy</p>
+        <p class="text-sm text-slate-600">NCL Pune • Sample ID: TS-001234</p>
+       </div>
+       <div class="flex items-center gap-3"><span class="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded">In Progress</span>
+        <div id="pdfDownload1" class="hidden"><button class="btn-primary px-4 py-2 rounded-lg font-semibold flex items-center gap-2">
+          <svg width="16" height="16" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /> <polyline points="14,2 14,8 20,8" /> <line x1="16" y1="13" x2="8" y2="13" /> <line x1="16" y1="17" x2="8" y2="17" /> <polyline points="10,9 9,9 8,9" />
+          </svg> Download PDF </button>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="card p-6">
+      <div class="flex items-center justify-between mb-4">
+       <div>
+        <p class="font-semibold text-slate-900">SEM Analysis</p>
+        <p class="text-sm text-slate-600">NCL Pune • Sample ID: TS-001235</p>
+       </div>
+       <div class="flex items-center gap-3"><span class="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded">In Progress</span>
+        <div id="pdfDownload2" class="hidden"><button class="btn-primary px-4 py-2 rounded-lg font-semibold flex items-center gap-2">
+          <svg width="16" height="16" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /> <polyline points="14,2 14,8 20,8" /> <line x1="16" y1="13" x2="8" y2="13" /> <line x1="16" y1="17" x2="8" y2="17" /> <polyline points="10,9 9,9 8,9" />
+          </svg> Download PDF </button>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div><!-- Report Preview Modal -->
+  <div id="reportModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+   <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+    <div class="flex items-center justify-between p-6 border-b border-slate-200">
+     <h3 class="text-xl font-bold text-slate-900">AI-Enhanced Report Preview</h3>
+     <div class="flex items-center gap-3"><button id="downloadFromModal" class="btn-primary px-4 py-2 rounded-lg font-semibold">Download PDF</button> <button id="closeModal" class="h-8 w-8 rounded-lg border border-slate-200 grid place-items-center hover:bg-slate-50">✕</button>
+     </div>
+    </div>
+    <div id="reportPreview" class="overflow-y-auto max-h-[calc(90vh-80px)] p-6"></div>
+   </div>
+  </div>
+  <footer class="border-t border-slate-200 bg-white">
+   <div class="container mx-auto px-5 py-6 text-sm text-slate-600 flex flex-col sm:flex-row items-center justify-between gap-3">
+    <div>
+     © <span id="year"></span> Testify Samples. All rights reserved. • Empowering Research. Simplifying Testing.
+    </div>
+    <div class="flex gap-4">
+     <a href="#" class="hover:text-slate-900">Privacy</a><a href="#" class="hover:text-slate-900">Terms</a><a href="#" class="hover:text-slate-900">Support</a>
+    </div>
+   </div>
+  </footer>
+  <script>
+    // Global variables for location and maps
+    let userLocation = null;
+    let map = null;
+    let userMarker = null;
+    let labMarker = null;
+    let courierMarker = null;
+    let directionsService = null;
+    let directionsRenderer = null;
+
+    // Initialize Google Maps
+    function initMap() {
+      // Default location (Pune, India)
+      const defaultLocation = { lat: 18.5204, lng: 73.8567 };
+      
+      map = new google.maps.Map(document.getElementById('googleMap'), {
+        zoom: 12,
+        center: defaultLocation,
+        styles: [
+          {
+            featureType: 'poi',
+            elementType: 'labels',
+            stylers: [{ visibility: 'off' }]
+          }
+        ]
+      });
+
+      directionsService = new google.maps.DirectionsService();
+      directionsRenderer = new google.maps.DirectionsRenderer({
+        suppressMarkers: true,
+        polylineOptions: {
+          strokeColor: '#0B6EEF',
+          strokeWeight: 4
+        }
+      });
+      directionsRenderer.setMap(map);
+
+      // Add lab marker (NCL Pune)
+      labMarker = new google.maps.Marker({
+        position: { lat: 18.5467, lng: 73.8056 },
+        map: map,
+        title: 'NCL Pune',
+        icon: {
+          url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+            <svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="15" cy="15" r="12" fill="#22c55e" stroke="#fff" stroke-width="2"/>
+              <text x="15" y="19" text-anchor="middle" fill="white" font-size="12" font-weight="bold">🏥</text>
+            </svg>
+          `),
+          scaledSize: new google.maps.Size(30, 30)
+        }
+      });
+    }
+
+    // Location services
+    function enableLocationTracking() {
+      const locationStatus = document.getElementById('locationStatus');
+      const enableBtn = document.getElementById('enableLocation');
+      
+      if (!navigator.geolocation) {
+        locationStatus.innerHTML = '❌ Geolocation not supported';
+        return;
+      }
+
+      enableBtn.textContent = 'Getting location...';
+      enableBtn.disabled = true;
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          userLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          
+          locationStatus.innerHTML = '✅ Live tracking enabled';
+          enableBtn.textContent = 'Tracking Active';
+          enableBtn.classList.remove('btn-primary');
+          enableBtn.classList.add('bg-green-500', 'hover:bg-green-600');
+          
+          document.getElementById('userLocation').textContent = 'Live location detected';
+          
+          // Update map with user location
+          if (map) {
+            map.setCenter(userLocation);
+            
+            // Add user marker
+            if (userMarker) userMarker.setMap(null);
+            userMarker = new google.maps.Marker({
+              position: userLocation,
+              map: map,
+              title: 'Your Location',
+              icon: {
+                url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                  <svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="15" cy="15" r="12" fill="#3b82f6" stroke="#fff" stroke-width="2"/>
+                    <text x="15" y="19" text-anchor="middle" fill="white" font-size="12" font-weight="bold">📍</text>
+                  </svg>
+                `),
+                scaledSize: new google.maps.Size(30, 30)
+              }
+            });
+
+            // Calculate and display route
+            calculateRoute();
+            
+            // Start courier simulation
+            simulateCourierMovement();
+          }
+        },
+        (error) => {
+          locationStatus.innerHTML = '❌ Location access denied';
+          enableBtn.textContent = 'Enable Location';
+          enableBtn.disabled = false;
+          console.error('Geolocation error:', error);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 60000
+        }
+      );
+    }
+
+    // Calculate route between user and lab
+    function calculateRoute() {
+      if (!userLocation || !directionsService) return;
+
+      const labLocation = { lat: 18.5467, lng: 73.8056 }; // NCL Pune
+      
+      directionsService.route({
+        origin: userLocation,
+        destination: labLocation,
+        travelMode: google.maps.TravelMode.DRIVING
+      }, (result, status) => {
+        if (status === 'OK') {
+          directionsRenderer.setDirections(result);
+          
+          const route = result.routes[0];
+          const leg = route.legs[0];
+          document.getElementById('courierStatus').textContent = `${leg.duration.text} away`;
+        }
+      });
+    }
+
+    // Simulate courier movement
+    function simulateCourierMovement() {
+      if (!userLocation) return;
+
+      const labLocation = { lat: 18.5467, lng: 73.8056 };
+      let progress = 0;
+      
+      // Create courier marker
+      if (courierMarker) courierMarker.setMap(null);
+      courierMarker = new google.maps.Marker({
+        position: userLocation,
+        map: map,
+        title: 'Courier',
+        icon: {
+          url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+            <svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="15" cy="15" r="12" fill="#FFC43D" stroke="#fff" stroke-width="2"/>
+              <text x="15" y="19" text-anchor="middle" fill="white" font-size="12" font-weight="bold">🚚</text>
+            </svg>
+          `),
+          scaledSize: new google.maps.Size(30, 30)
+        }
+      });
+
+      // Animate courier movement
+      const moveInterval = setInterval(() => {
+        progress += 0.02; // 2% progress each step
+        
+        if (progress >= 1) {
+          progress = 1;
+          clearInterval(moveInterval);
+          document.getElementById('courierStatus').textContent = 'Delivered to lab';
+        }
+        
+        // Interpolate position
+        const lat = userLocation.lat + (labLocation.lat - userLocation.lat) * progress;
+        const lng = userLocation.lng + (labLocation.lng - userLocation.lng) * progress;
+        
+        courierMarker.setPosition({ lat, lng });
+        
+        // Update status
+        const percentage = Math.round(progress * 100);
+        if (percentage < 100) {
+          document.getElementById('courierStatus').textContent = `${percentage}% to lab`;
+        }
+      }, 1000); // Update every second
+    }
+
+    // Order action handler for lab dashboard
+    function handleOrderAction(button, action, researcher, test) {
+      const orderCard = button.closest('.order-card');
+      const buttons = orderCard.querySelectorAll('button');
+      
+      // Disable all buttons and show processing state
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        btn.classList.add('processing');
+      });
+      
+      // Show processing feedback
+      button.innerHTML = action === 'accept' ? 
+        '<div class="flex items-center gap-2"><div class="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></div>Processing...</div>' :
+        '<div class="flex items-center gap-2"><div class="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></div>Processing...</div>';
+      
+      // Simulate processing time
+      setTimeout(() => {
+        if (action === 'accept') {
+          button.innerHTML = '✅ Accepted';
+          button.classList.remove('accept-btn');
+          button.classList.add('bg-green-600');
+          
+          // Move to history
+          moveToHistory(researcher, test, 'Accepted');
+          
+          // Show success message
+          showNotification(`Order from ${researcher} for ${test} has been accepted.`, 'success');
+        } else {
+          button.innerHTML = '❌ Rejected';
+          button.classList.remove('reject-btn');
+          button.classList.add('bg-red-600');
+          
+          // Move to history
+          moveToHistory(researcher, test, 'Rejected');
+          
+          // Show rejection message
+          showNotification(`Order from ${researcher} for ${test} has been rejected.`, 'error');
+        }
+        
+        // Remove the order card after a delay
+        setTimeout(() => {
+          orderCard.style.opacity = '0';
+          orderCard.style.transform = 'translateX(-100%)';
+          setTimeout(() => {
+            orderCard.remove();
+          }, 300);
+        }, 2000);
+        
+      }, 1500);
+    }
+
+    // Move order to history
+    function moveToHistory(researcher, test, status) {
+      const historyContent = document.getElementById('historyContent');
+      const statusColor = status === 'Accepted' ? 'green' : 'red';
+      const statusIcon = status === 'Accepted' ? 
+        '<polyline points="20,6 9,17 4,12"/>' : 
+        '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';
+      
+      const historyItem = document.createElement('div');
+      historyItem.className = 'card p-6';
+      historyItem.innerHTML = `
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <div class="h-10 w-10 rounded-lg bg-${statusColor}-100 grid place-items-center">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#${statusColor === 'green' ? '22c55e' : 'ef4444'}" stroke-width="2">
+                ${statusIcon}
+              </svg>
+            </div>
+            <div>
+              <p class="font-semibold text-slate-900">${researcher} - ${test}</p>
+              <p class="text-sm text-slate-600">${status} • ${new Date().toLocaleString()}</p>
+            </div>
+          </div>
+          <span class="text-xs text-${statusColor}-600 bg-${statusColor}-50 px-2 py-1 rounded">${status}</span>
+        </div>
+      `;
+      
+      historyContent.insertBefore(historyItem, historyContent.firstChild);
+    }
+
+    // Show notification
+    function showNotification(message, type) {
+      const notification = document.createElement('div');
+      notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${
+        type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+      }`;
+      notification.textContent = message;
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => {
+          notification.remove();
+        }, 300);
+      }, 3000);
+    }
+
+    // Menu
+    const menuBtn = document.getElementById('menuBtn'); const mobileMenu = document.getElementById('mobileMenu');
+    menuBtn?.addEventListener('click', ()=> mobileMenu.classList.toggle('hidden'));
+
+    // Reveal
+    const revs = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); }}); }, { threshold: 0.15 });
+    revs.forEach(r=>observer.observe(r));
+
+    // Hero progress
+    setTimeout(()=>{ document.getElementById('heroBar').style.width = '78%'; }, 450);
+
+    // Enable location tracking
+    document.getElementById('enableLocation')?.addEventListener('click', enableLocationTracking);
+
+    // Lab data with pricing
+    const labsData = {
+      'ncl': {
+        name: 'National Chemical Laboratory (NCL), Pune',
+        address: 'Dr. Homi Bhabha Road, Pune',
+        location: { x: 45, y: 40 },
+        tests: {
+          'Optical Microscope RT': { price: '₹1000/sample', qty: '1 sample', days: '3 days' },
+          'Optical Microscope HT': { price: '₹3000/hour', qty: '1 hour', days: '3 days' },
+          'Confocal Microscope': { price: '₹10000/sample', qty: '1 sample', days: '5 days' },
+          'AFM': { price: '₹5000/hour', qty: '1 hour', days: '7 days' },
+          'SEM (FESEM)': { price: '₹7000/sample', qty: '30 mg', days: '10 days' },
+          'SEM (SEM+EDX)': { price: '₹9000/sample', qty: '30 mg', days: '10 days' },
+          'SEM (SEM+EDX+Mapping)': { price: '₹12000/sample', qty: '30 mg', days: '10 days' },
+          'SEM High Vacuum': { price: '₹4000/sample', qty: '30 mg', days: '8 days' },
+          'SEM High Vacuum + EDX': { price: '₹6000/sample', qty: '30 mg', days: '8 days' },
+          'SEM High Vacuum + Mapping': { price: '₹7000/sample', qty: '30 mg', days: '8 days' },
+          'SEM Low Vacuum': { price: '₹5000/sample', qty: '30 mg', days: '8 days' },
+          'Gas Chromatography': { price: '₹750/sample', qty: '50 mg', days: '5 days' },
+          'GC-MS (30 min run)': { price: '₹3000/sample', qty: '50 mg', days: '8 days' },
+          'GC-MS (50 min run)': { price: '₹5000/sample', qty: '50 mg', days: '8 days' },
+          'High Temp GPC': { price: '₹20000/sample', qty: '1 g', days: '8 days' },
+          'GPC (CHCl3, THF)': { price: '₹9000/sample', qty: '1 g', days: '8 days' },
+          'Aqueous GPC': { price: '₹7500/sample', qty: '1 g', days: '8 days' },
+          'UPLC': { price: '₹2000/sample', qty: '50 mg', days: '5 days' },
+          'HPLC (UV, UV-RI)': { price: '₹1000/sample', qty: '50 mg', days: '5 days' },
+          'UV-Vis (Liquid)': { price: '₹1000/sample', qty: '0.5 ml', days: '3 days' },
+          'UV-Vis (Solid)': { price: '₹3000/sample', qty: '20 mg', days: '3 days' },
+          'UV-Vis-NIR (Liquid)': { price: '₹2500/sample', qty: '0.5 ml', days: '5 days' },
+          'UV-Vis-NIR (Solid)': { price: '₹5000/sample', qty: '20 mg', days: '5 days' },
+          'FTIR': { price: '₹1000/sample', qty: '20 mg', days: '3 days' },
+          'Fluorescence Spectrometer': { price: '₹1500/sample', qty: '0.5 ml', days: '5 days' },
+          'CD Spectrophotometer': { price: '₹2500/sample', qty: '0.5 ml', days: '7 days' },
+          'Raman Spectroscopy (Regular)': { price: '₹2000/sample', qty: '50 mg', days: '7 days' },
+          'Raman Spectroscopy (Low Temp/HT)': { price: '₹5000/sample', qty: '50 mg', days: '10 days' }
+        }
+      },
+      'diya': {
+        name: 'DIYA Labs',
+        address: 'Kopar Khairane, Navi Mumbai & Airoli, Kalwa Industrial Area',
+        location: { x: 65, y: 55 },
+        tests: {
+          'FTIR': { price: '₹400/sample', qty: '20 mg / 0.5 ml', days: '7 days' },
+          'Raman Spectroscopy (Regular)': { price: '₹800/sample', qty: '50 mg', days: '7 days' },
+          'Mass Spectrometry': { price: '₹800/sample', qty: '15 mg', days: '6 days' },
+          'NMR (H¹)': { price: '₹900/sample', qty: '20 mg', days: '6 days' },
+          'NMR (C¹³)': { price: '₹1300/sample', qty: '20 mg', days: '6 days' },
+          'NMR (P³¹)': { price: '₹2000/sample', qty: '20 mg', days: '6 days' },
+          'Zeta Potential': { price: '₹1000/sample', qty: '2 ml', days: '8 days' },
+          'Particle Size (Nanoscale)': { price: '₹1000/sample', qty: '100 mg / 2 ml', days: '8 days' },
+          'Particle Size (Micron)': { price: '₹2500/sample', qty: '1 g', days: '8 days' },
+          'DSC': { price: '₹1500/sample', qty: '20 mg / 0.5 ml', days: '10 days' },
+          'TGA': { price: '₹1500/sample', qty: '20 mg', days: '10 days' },
+          'Powder XRD': { price: '₹1200/sample', qty: '0.5 g', days: '10 days' },
+          'XRF': { price: '₹2500/sample', qty: '1 g', days: '10 days' },
+          'SEM (Micron)': { price: '₹1500/sample', qty: '30 mg / 0.5 ml', days: '8-25 days' },
+          'SEM-EDX': { price: '₹1700/sample', qty: '30 mg / 0.5 ml', days: '10 days' },
+          'FESEM': { price: '₹2000/sample', qty: '30 mg / 0.5 ml', days: '10 days' },
+          'FESEM-EDX': { price: '₹2200/sample', qty: '30 mg / 0.5 ml', days: '10 days' },
+          'TEM': { price: '₹3500/sample', qty: '30 mg / 0.5 ml', days: '10 days' },
+          'AFM': { price: '₹2500/sample', qty: 'thin film 1×1 cm', days: '15 days' },
+          'GCMS (Library Search)': { price: '₹4500/sample', qty: '50 mg', days: '8 days' },
+          'LCMS': { price: '₹3500/sample', qty: '50 mg', days: '8 days' },
+          'CHNS Elemental': { price: '₹4500/sample', qty: '5 g / ml', days: '8 days' },
+          'BET Surface (Single Point)': { price: '₹2200/sample', qty: '0.5 g', days: '8 days' },
+          'BET Surface (Multipoint)': { price: '₹3000/sample', qty: '0.5 g', days: '8 days' },
+          'GPC (Aqueous)': { price: '₹5000/sample', qty: '1 g', days: '8 days' },
+          'GPC (Solvent)': { price: '₹6000/sample', qty: '1 g', days: '8 days' },
+          'XPS': { price: '₹5000/sample', qty: '20 mg', days: '20 days' },
+          'UV-Vis': { price: '₹1500/sample', qty: '20 mg', days: '10 days' },
+          'AAS (Per Element)': { price: '₹1500/element', qty: '1 g', days: '8 days' }
+        }
+      },
+      'ari': {
+        name: 'Agharkar Research Institute (ARI), Pune',
+        address: 'G.G. Agarkar Road, Pune',
+        location: { x: 35, y: 50 },
+        tests: {
+          'HPLC': { price: '₹3000/hour', qty: '1 hour', days: '5 days' },
+          'Ion Chromatography (Per Hour)': { price: '₹4500/hour', qty: '1 hour', days: '7 days' },
+          'Ion Chromatography (Per Sample)': { price: '₹3000-6000/sample', qty: '1 sample', days: '7 days' },
+          'GC Gas Analysis': { price: '₹2200/sample', qty: '50 mg', days: '8 days' },
+          'GC Solvent & VFA': { price: '₹34000/sample', qty: '50 mg', days: '10 days' },
+          'XRD (Regular)': { price: '₹2000/sample', qty: '0.5 g', days: '10 days' },
+          'XRD (Slow Scan)': { price: '₹5000/sample', qty: '0.5 g', days: '15 days' },
+          'FTIR': { price: '₹1000/sample', qty: '20 mg', days: '5 days' },
+          'AAS': { price: '₹2500-5000/sample', qty: '1 g', days: '8 days' },
+          'Lyophilization (Fungal/Microbial)': { price: '₹2500-5000/batch', qty: '1 batch', days: '10 days' },
+          'AFM Analysis': { price: '₹35000/hour', qty: '1 hour', days: '15 days' },
+          'Fluorescence Microscopy': { price: '₹2500-3500/hour', qty: '1 hour', days: '7 days' },
+          'SEM Cryo Mode': { price: '₹7000/sample', qty: '30 mg', days: '10 days' },
+          'SEM HV Mode': { price: '₹3500/sample', qty: '30 mg', days: '8 days' },
+          'SEM LV Mode': { price: '₹2000-4000/sample', qty: '30 mg', days: '8 days' },
+          'SEM+EDS': { price: '₹3000-6000/sample', qty: '30 mg', days: '10 days' },
+          'EDS Standalone': { price: '₹1500/spot', qty: '1 spot', days: '5 days' },
+          'HPTLC Qualitative': { price: '₹4000/sample', qty: '100 mg', days: '10 days' },
+          'HPTLC Quantitative': { price: '₹6000/sample', qty: '100 mg', days: '12 days' },
+          'Drug Study (Macro/Micro)': { price: '₹4000/sample', qty: '50 mg', days: '8 days' },
+          'Phytochemical Qualitative': { price: '₹250/test', qty: '50 mg', days: '5 days' },
+          'Phytochemical Quantitative': { price: '₹2500/test', qty: '100 mg', days: '10 days' },
+          'TLC Profile': { price: '₹1000/sample', qty: '50 mg', days: '7 days' }
+        }
+      }
+    };
+
+    // Build categorized tests
+    const testsByCategory = [
+      { cat: 'Microscopic Techniques', items: [
+        'Optical Microscope RT', 'Optical Microscope HT', 'Confocal Microscope', 'AFM', 'AFM Analysis',
+        'SEM (FESEM)', 'SEM (SEM+EDX)', 'SEM (SEM+EDX+Mapping)', 'SEM High Vacuum', 'SEM High Vacuum + EDX',
+        'SEM High Vacuum + Mapping', 'SEM Low Vacuum', 'SEM (Micron)', 'SEM-EDX', 'FESEM', 'FESEM-EDX',
+        'SEM Cryo Mode', 'SEM HV Mode', 'SEM LV Mode', 'SEM+EDS', 'EDS Standalone', 'TEM',
+        'Fluorescence Microscopy'
+      ]},
+      { cat: 'Mass Spectrometry / Chromatography', items: [
+        'Gas Chromatography', 'GC-MS (30 min run)', 'GC-MS (50 min run)', 'GCMS (Library Search)',
+        'GC Gas Analysis', 'GC Solvent & VFA', 'High Temp GPC', 'GPC (CHCl3, THF)', 'Aqueous GPC',
+        'GPC (Aqueous)', 'GPC (Solvent)', 'UPLC', 'HPLC (UV, UV-RI)', 'HPLC', 'LCMS', 'Mass Spectrometry',
+        'Ion Chromatography (Per Hour)', 'Ion Chromatography (Per Sample)'
+      ]},
+      { cat: 'Spectroscopic Techniques', items: [
+        'UV-Vis (Liquid)', 'UV-Vis (Solid)', 'UV-Vis-NIR (Liquid)', 'UV-Vis-NIR (Solid)', 'UV-Vis',
+        'FTIR', 'Fluorescence Spectrometer', 'CD Spectrophotometer', 'Raman Spectroscopy (Regular)',
+        'Raman Spectroscopy (Low Temp/HT)', 'NMR (H¹)', 'NMR (C¹³)', 'NMR (P³¹)', 'XRD (Regular)',
+        'XRD (Slow Scan)', 'Powder XRD', 'XRF', 'XPS'
+      ]},
+      { cat: 'Thermal & Physical Analysis', items: [
+        'DSC', 'TGA', 'Zeta Potential', 'Particle Size (Nanoscale)', 'Particle Size (Micron)',
+        'BET Surface (Single Point)', 'BET Surface (Multipoint)', 'CHNS Elemental', 'AAS (Per Element)', 'AAS'
+      ]},
+      { cat: 'Biological & Pharmaceutical', items: [
+        'Lyophilization (Fungal/Microbial)', 'HPTLC Qualitative', 'HPTLC Quantitative',
+        'Drug Study (Macro/Micro)', 'Phytochemical Qualitative', 'Phytochemical Quantitative', 'TLC Profile'
+      ]}
+    ];
+
+    const testGroupsEl = document.getElementById('testGroups');
+    const chosenInfo = document.getElementById('chosenInfo');
+    const chosenName = document.getElementById('chosenName');
+    const summaryTest = document.getElementById('summaryTest');
+    let selectedTest = null;
+    let selectedLabId = null;
+
+    function renderGroups(groups){
+      testGroupsEl.innerHTML = '';
+      const frag = document.createDocumentFragment();
+      groups.forEach(group=>{
+        const section = document.createElement('div');
+        section.innerHTML = `
+          <div class="flex items-center justify-between mb-3">
+            <div class="cat-label">${group.cat}</div>
+            <div class="text-xs text-slate-500">Select lab to see pricing</div>
+          </div>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+        `;
+        const grid = section.querySelector('.grid');
+        group.items.forEach(testName=>{
+          const btn = document.createElement('button');
+          btn.className = 'tile rounded-xl p-4 text-left hover:bg-blue-100/70 transition border';
+          
+          // Find price from any lab that has this test
+          let displayPrice = 'Select lab for price';
+          let displayQty = '';
+          let displayDays = '';
+          
+          for(const labId in labsData) {
+            if(labsData[labId].tests[testName]) {
+              displayPrice = labsData[labId].tests[testName].price;
+              displayQty = labsData[labId].tests[testName].qty;
+              displayDays = labsData[labId].tests[testName].days;
+              break;
+            }
+          }
+          
+          btn.innerHTML = `
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <p class="font-semibold">${testName}</p>
+                <p class="text-xs text-slate-500">${group.cat}</p>
+                <p class="text-xs text-slate-600 mt-1">${displayQty} • ${displayDays}</p>
+              </div>
+              <div class="text-right price font-semibold text-sm">${displayPrice}</div>
+            </div>
+          `;
+          btn.addEventListener('click', ()=>{
+            selectedTest = testName;
+            chosenName.textContent = testName;
+            summaryTest.textContent = testName;
+            chosenInfo.classList.remove('hidden');
+            document.getElementById('labs').scrollIntoView({ behavior:'smooth' });
+            updateLabPricing();
+          });
+          grid.appendChild(btn);
+        });
+        frag.appendChild(section);
+      });
+      testGroupsEl.appendChild(frag);
+    }
+    renderGroups(testsByCategory);
+
+    // Search and filter
+    const searchInput = document.getElementById('searchTest');
+    document.getElementById('searchBtn').addEventListener('click', doSearch);
+    searchInput.addEventListener('input', doSearch);
+    document.getElementById('clearBtn').addEventListener('click', ()=>{ searchInput.value=''; renderGroups(testsByCategory); });
+
+    function doSearch(){
+      const q = (searchInput.value || '').toLowerCase().trim();
+      if(!q){ renderGroups(testsByCategory); return; }
+      const filtered = testsByCategory.map(group=>{
+        const items = group.items.filter(item => item.toLowerCase().includes(q) || group.cat.toLowerCase().includes(q));
+        return { cat: group.cat, items };
+      }).filter(g=>g.items.length);
+      renderGroups(filtered);
+    }
+
+    const allLabsList = document.getElementById('allLabsList');
+    const labSearch = document.getElementById('labSearch');
+    const mapPins = document.getElementById('mapPins');
+
+    function renderAllLabs(filter = ''){
+      allLabsList.innerHTML = '';
+      mapPins.innerHTML = '';
+      
+      Object.entries(labsData).forEach(([labId, lab]) => {
+        if(filter && !lab.name.toLowerCase().includes(filter.toLowerCase()) && 
+           !lab.address.toLowerCase().includes(filter.toLowerCase())) return;
+           
+        // Create lab card
+        const el = document.createElement('button');
+        el.className = `w-full text-left bg-white border rounded-xl p-4 hover:border-blue-300 transition ${selectedLabId === labId ? 'active-step' : ''}`;
+        el.dataset.id = labId;
+        
+        let testPrice = 'Select test first';
+        let testQty = '';
+        let testDays = '';
+        if(selectedTest && lab.tests[selectedTest]) {
+          testPrice = lab.tests[selectedTest].price;
+          testQty = lab.tests[selectedTest].qty;
+          testDays = lab.tests[selectedTest].days;
+        }
+        
+        const isAuthorized = labId === 'ncl';
+        
+        el.innerHTML = `
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <div class="flex items-center gap-2">
+                <p class="font-semibold">${lab.name}</p>
+                ${isAuthorized ? '<span class="auth-badge">Certified</span>' : ''}
+              </div>
+              <p class="text-xs text-slate-500">${lab.address}</p>
+              ${selectedTest ? `<p class="text-xs text-slate-600 mt-1">${testQty} • ${testDays}</p>` : ''}
+            </div>
+            <div class="text-right">
+              <div class="price font-semibold text-sm">${testPrice}</div>
+              ${selectedTest && lab.tests[selectedTest] ? '<div class="text-xs text-green-600">Available</div>' : selectedTest ? '<div class="text-xs text-slate-400">Not available</div>' : ''}
+            </div>
+          </div>
+        `;
+        
+        el.addEventListener('click', ()=>{
+          if(selectedTest && !lab.tests[selectedTest]) {
+            showNotification(`${selectedTest} is not available at ${lab.name}. Please select a different lab or test.`, 'error');
+            return;
+          }
+          allLabsList.querySelectorAll('button').forEach(b=>b.classList.remove('active-step'));
+          el.classList.add('active-step');
+          selectedLabId = labId;
+          updateTestPricing();
+        });
+        
+        allLabsList.appendChild(el);
+        
+        // Add map pin
+        const pin = document.createElement('div');
+        pin.className = `pin absolute cursor-pointer hover:scale-110 transition-transform ${selectedLabId === labId ? 'ring-2 ring-blue-400' : ''}`;
+        pin.style.left = lab.location.x + '%';
+        pin.style.top = lab.location.y + '%';
+        pin.title = lab.name;
+        if(isAuthorized) {
+          pin.style.background = '#22c55e';
+          pin.style.boxShadow = '0 0 0 6px rgba(34,197,94,0.18)';
+        }
+        
+        // Add click handler for map pins
+        pin.addEventListener('click', () => {
+          if(selectedTest && !lab.tests[selectedTest]) {
+            showNotification(`${selectedTest} is not available at ${lab.name}. Please select a different lab or test.`, 'error');
+            return;
+          }
+          allLabsList.querySelectorAll('button').forEach(b=>b.classList.remove('active-step'));
+          const labCard = allLabsList.querySelector(`[data-id="${labId}"]`);
+          if(labCard) {
+            labCard.classList.add('active-step');
+            labCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          selectedLabId = labId;
+          updateTestPricing();
+          renderAllLabs(labSearch.value);
+        });
+        
+        mapPins.appendChild(pin);
+      });
+    }
+
+    function updateLabPricing(){
+      renderAllLabs(labSearch.value);
+    }
+
+    function updateTestPricing(){
+      if(selectedTest && selectedLabId && labsData[selectedLabId].tests[selectedTest]) {
+        const testData = labsData[selectedLabId].tests[selectedTest];
+        document.getElementById('summaryPrice').textContent = testData.price;
+        document.getElementById('summaryTAT').textContent = testData.days;
+      }
+    }
+
+    labSearch.addEventListener('input', () => renderAllLabs(labSearch.value));
+    renderAllLabs();
+
+    document.getElementById('bookLab').addEventListener('click', ()=>{
+      if(!selectedTest){ showNotification('Please select a test first.', 'error'); return; }
+      if(!selectedLabId){ showNotification('Please select a lab.', 'error'); return; }
+      if(!labsData[selectedLabId].tests[selectedTest]){ 
+        showNotification('Selected test is not available at this lab. Please choose a different combination.', 'error'); 
+        return; 
+      }
+      
+      document.getElementById('summaryLab').textContent = labsData[selectedLabId].name;
+      updateTestPricing();
+      document.getElementById('pickup').scrollIntoView({ behavior:'smooth' });
+      advancePickup();
+    });
+
+    // Pickup progress
+    const pickupStages = ['Scheduled','Picked Up','In Transit','Delivered'];
+    let pickupIndex = 0;
+    const pickupBar = document.getElementById('pickupBar');
+    const pickupLabel = document.getElementById('pickupLabel');
+    function advancePickup(){
+      pickupIndex = 0;
+      function tick(){
+        pickupBar.style.width = ((pickupIndex+1) / pickupStages.length) * 100 + '%';
+        pickupLabel.textContent = pickupStages[pickupIndex];
+        pickupIndex++;
+        if(pickupIndex < pickupStages.length){ setTimeout(tick, 900); }
+      }
+      tick();
+    }
+
+    // Results progress
+    const resultBar = document.getElementById('resultBar');
+    let rb = 0; const rInt = setInterval(()=>{ rb += 20; if(rb>100){ rb=100; clearInterval(rInt); } resultBar.style.width = rb + '%'; }, 600);
+
+    // Payment + gated download
+    const payBtn = document.getElementById('payBtn');
+    const payStatus = document.getElementById('payStatus');
+    const downloadBtn = document.getElementById('downloadBtn');
+    let paid = false;
+
+    payBtn.addEventListener('click', ()=>{
+      const tos = document.getElementById('tos').checked;
+      if(!tos){ showNotification('Please agree to the terms.', 'error'); return; }
+      payBtn.disabled = true; payBtn.textContent = 'Processing...';
+      setTimeout(()=>{
+        payBtn.textContent = 'Paid ✔'; payStatus.classList.remove('hidden');
+        paid = true; 
+        downloadBtn.disabled = false; 
+        downloadBtn.classList.remove('btn-soft');
+        downloadBtn.classList.add('btn-primary');
+        document.getElementById('downloadText').textContent = 'Download AI Report';
+      }, 900);
+    });
+
+    function buildReportHTML(){
+      const test = document.getElementById('summaryTest').textContent;
+      const tat = document.getElementById('summaryTAT').textContent;
+      const price = document.getElementById('summaryPrice').textContent;
+      const labName = document.getElementById('summaryLab').textContent;
+      const labData = selectedLabId ? labsData[selectedLabId] : null;
+      const testData = selectedTest && labData ? labData.tests[selectedTest] : null;
+      const sampleId = `TS-${Date.now().toString().slice(-6)}`;
+      const reportDate = new Date().toLocaleDateString('en-IN');
+      
+      return `
+<div class="report-container" style="max-width: 800px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+  <div style="position: relative;">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 60px; color: rgba(11,110,239,0.05); font-weight: bold; pointer-events: none; z-index: 1;">TESTIFY SAMPLES</div>
+    
+    <!-- Header with Testify Samples Logo -->
+    <div style="background: linear-gradient(135deg, #0B6EEF, #3b82f6); color: white; padding: 40px 30px; text-align: center; position: relative; z-index: 2;">
+      <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 15px;">
+        <svg width="40" height="40" viewBox="0 0 100 100" style="filter: brightness(0) invert(1);">
+          <circle cx="50" cy="50" r="45" fill="#ffffff" stroke="#0B6EEF" stroke-width="2"/>
+          <path d="M30 35h40M50 35v30M35 55h30" stroke="#0B6EEF" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="50" cy="25" r="3" fill="#FFC43D"/>
+        </svg>
+        <div style="font-size: 32px; font-weight: bold;">TESTIFY SAMPLES</div>
+      </div>
+      <div style="font-size: 16px; opacity: 0.9; margin-bottom: 10px;">India's Smart Gateway to Scientific Testing</div>
+      <div style="font-size: 14px; opacity: 0.8;">AI-Enhanced Laboratory Analysis Report</div>
+    </div>
+    
+    <!-- Laboratory Information -->
+    <div style="background: linear-gradient(135deg, #f1f5f9, #e2e8f0); padding: 25px; border-bottom: 3px solid #0B6EEF; position: relative; z-index: 2;">
+      <div style="text-align: center;">
+        <div style="font-size: 24px; font-weight: bold; color: #1e293b; margin-bottom: 8px;">${labName}</div>
+        <div style="color: #64748b; font-size: 16px; margin-bottom: 15px;">${labData ? labData.address : 'Laboratory Address'}</div>
+        <div style="display: inline-block; background: #0B6EEF; color: white; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">CERTIFIED LABORATORY</div>
+      </div>
+    </div>
+    
+    <!-- Report Content -->
+    <div style="padding: 30px; position: relative; z-index: 2;">
+      <!-- Sample Information -->
+      <div style="margin-bottom: 30px;">
+        <div style="font-size: 20px; font-weight: bold; color: #1e293b; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #e2e8f0; display: flex; align-items: center; gap: 10px;">
+          <span>📋</span> Sample Information
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+          <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #0B6EEF;">
+            <div style="font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 600; margin-bottom: 5px;">Sample ID</div>
+            <div style="font-size: 16px; font-weight: 600; color: #1e293b;">${sampleId}</div>
+          </div>
+          <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #0B6EEF;">
+            <div style="font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 600; margin-bottom: 5px;">Test Performed</div>
+            <div style="font-size: 16px; font-weight: 600; color: #1e293b;">${test}</div>
+          </div>
+          <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #0B6EEF;">
+            <div style="font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 600; margin-bottom: 5px;">Sample Quantity</div>
+            <div style="font-size: 16px; font-weight: 600; color: #1e293b;">${testData ? testData.qty : '1 sample'}</div>
+          </div>
+          <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #0B6EEF;">
+            <div style="font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 600; margin-bottom: 5px;">Report Date</div>
+            <div style="font-size: 16px; font-weight: 600; color: #1e293b;">${reportDate}</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- AI Analysis Results -->
+      <div style="margin-bottom: 30px;">
+        <div style="font-size: 20px; font-weight: bold; color: #1e293b; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #e2e8f0; display: flex; align-items: center; gap: 10px;">
+          <span>🤖</span> AI-Enhanced Analysis Results
+        </div>
+        <div style="background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border: 1px solid #0ea5e9; border-radius: 12px; padding: 25px; margin: 15px 0;">
+          ${test.includes('FTIR') ? `
+            <h4 style="color: #1e293b; margin-bottom: 15px; font-size: 18px;">AI-Enhanced FTIR Spectroscopy Results</h4>
+            <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                <div><strong>Resolution:</strong> 4 cm⁻¹</div>
+                <div><strong>Scan Range:</strong> 4000–400 cm⁻¹</div>
+                <div><strong>AI Confidence:</strong> 97.3%</div>
+                <div><strong>Sample State:</strong> Solid/KBr pellet</div>
+              </div>
+              <div style="margin-top: 15px;">
+                <strong>AI-Identified Functional Groups:</strong>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                  <li>1715 cm⁻¹ - C=O stretch (carbonyl) - High confidence</li>
+                  <li>1250 cm⁻¹ - C-O stretch (ether/alcohol) - Medium confidence</li>
+                  <li>2900-3000 cm⁻¹ - C-H stretch (alkyl) - High confidence</li>
+                  <li>3200-3600 cm⁻¹ - O-H stretch (hydroxyl) - Medium confidence</li>
+                </ul>
+                <div style="background: #e0f2fe; padding: 10px; border-radius: 6px; margin-top: 10px;">
+                  <strong>AI Recommendation:</strong> Structure consistent with organic polymer containing carbonyl and hydroxyl groups. Suggest NMR for structural confirmation.
+                </div>
+              </div>
+            </div>
+          ` : test.includes('SEM') ? `
+            <h4 style="color: #1e293b; margin-bottom: 15px; font-size: 18px;">AI-Enhanced SEM Analysis Results</h4>
+            <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                <div><strong>Magnification:</strong> 100x to 50,000x</div>
+                <div><strong>AI Processing:</strong> Deep learning enhanced</div>
+                <div><strong>Particle Count:</strong> 1,247 detected</div>
+                <div><strong>Size Distribution:</strong> AI calculated</div>
+              </div>
+              <div style="margin-top: 15px;">
+                <strong>AI Morphological Analysis:</strong>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                  <li>Crystalline structure with well-defined facets (AI confidence: 94%)</li>
+                  <li>Uniform particle size distribution (CV: 12.3%)</li>
+                  <li>Average particle size: 50-200 nm (AI measured)</li>
+                  <li>Surface roughness index: 0.23 (AI calculated)</li>
+                </ul>
+                <div style="background: #e0f2fe; padding: 10px; border-radius: 6px; margin-top: 10px;">
+                  <strong>AI Insight:</strong> Particles show excellent uniformity suggesting controlled synthesis conditions. Recommend XRD for crystalline phase identification.
+                </div>
+              </div>
+            </div>
+          ` : test.includes('NMR') ? `
+            <h4 style="color: #1e293b; margin-bottom: 15px; font-size: 18px;">AI-Enhanced NMR Spectroscopy Results</h4>
+            <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                <div><strong>Solvent:</strong> CDCl₃</div>
+                <div><strong>AI Peak Detection:</strong> 23 peaks identified</div>
+                <div><strong>Structure Prediction:</strong> 89% confidence</div>
+                <div><strong>Purity Assessment:</strong> >95% (AI calculated)</div>
+              </div>
+              <div style="margin-top: 15px;">
+                <strong>AI Chemical Shift Analysis:</strong>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                  <li>Chemical shifts match predicted structure (AI confidence: 89%)</li>
+                  <li>Integration ratios confirm molecular composition</li>
+                  <li>Coupling patterns indicate structural connectivity</li>
+                  <li>No significant impurity peaks detected by AI</li>
+                </ul>
+                <div style="background: #e0f2fe; padding: 10px; border-radius: 6px; margin-top: 10px;">
+                  <strong>AI Structural Prediction:</strong> Compound structure matches target molecule with high confidence. Suggest mass spectrometry for molecular weight confirmation.
+                </div>
+              </div>
+            </div>
+          ` : `
+            <h4 style="color: #1e293b; margin-bottom: 15px; font-size: 18px;">AI-Enhanced ${test} Analysis Results</h4>
+            <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+              <div style="margin-bottom: 15px;">
+                <strong>AI Analysis Summary:</strong>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                  <li>Analysis completed with AI-enhanced data processing</li>
+                  <li>Results verified by machine learning algorithms</li>
+                  <li>Data integrity maintained with blockchain verification</li>
+                  <li>Quality control parameters within AI-optimized limits</li>
+                </ul>
+                <div style="background: #e0f2fe; padding: 10px; border-radius: 6px; margin-top: 10px;">
+                  <strong>AI Recommendation:</strong> Results show excellent quality metrics. Consider complementary techniques for comprehensive characterization.
+                </div>
+              </div>
+            </div>
+          `}
+          
+          <!-- AI-Enhanced Spectrum Placeholder -->
+          <div style="background: #f1f5f9; border: 2px dashed #cbd5e1; border-radius: 8px; padding: 40px; text-align: center; color: #64748b; margin: 15px 0;">
+            <div style="font-size: 24px; margin-bottom: 10px;">🤖📈</div>
+            <div style="font-weight: 600; margin-bottom: 5px;">AI-Enhanced Spectrum/Data Visualization</div>
+            <div style="font-size: 14px;">Machine learning processed analytical data with intelligent insights</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Expert Validation -->
+      <div style="margin-bottom: 30px;">
+        <div style="font-size: 20px; font-weight: bold; color: #1e293b; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #e2e8f0; display: flex; align-items: center; gap: 10px;">
+          <span>👨‍🔬</span> Expert Validation & Quality Assurance
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+          <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #22c55e;">
+            <div style="font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 600; margin-bottom: 5px;">AI Analyst</div>
+            <div style="font-size: 16px; font-weight: 600; color: #1e293b;">DeepChem AI v3.2</div>
+          </div>
+          <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #22c55e;">
+            <div style="font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 600; margin-bottom: 5px;">Human Expert</div>
+            <div style="font-size: 16px; font-weight: 600; color: #1e293b;">Dr. ${Math.random() > 0.5 ? 'Priya Sharma' : 'Rajesh Kumar'}</div>
+          </div>
+          <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #22c55e;">
+            <div style="font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 600; margin-bottom: 5px;">AI Confidence</div>
+            <div style="font-size: 16px; font-weight: 600; color: #059669;">94.7%</div>
+          </div>
+          <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #22c55e;">
+            <div style="font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 600; margin-bottom: 5px;">Status</div>
+            <div style="font-size: 16px; font-weight: 600; color: #059669;">✓ AI + Expert Approved</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <div style="background: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b; position: relative; z-index: 2;">
+      <div style="font-weight: bold; margin-bottom: 5px;">Testify Samples • India's Smart Gateway to Scientific Testing</div>
+      <div>AI-enhanced analysis with expert validation. Empowering Research. Simplifying Testing.</div>
+      <div style="margin-top: 10px;">Generated on ${reportDate} • Report ID: ${sampleId} • Turnaround: ${tat} • Cost: ${price}</div>
+    </div>
+  </div>
+</div>`;
+    }
+
+    // Modal functionality
+    const reportModal = document.getElementById('reportModal');
+    const reportPreview = document.getElementById('reportPreview');
+    const closeModal = document.getElementById('closeModal');
+    const downloadFromModal = document.getElementById('downloadFromModal');
+
+    function showReportPreview() {
+      const reportHTML = buildReportHTML();
+      reportPreview.innerHTML = reportHTML;
+      reportModal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function hideReportPreview() {
+      reportModal.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+
+    closeModal.addEventListener('click', hideReportPreview);
+    reportModal.addEventListener('click', (e) => {
+      if (e.target === reportModal) hideReportPreview();
+    });
+
+    downloadFromModal.addEventListener('click', () => {
+      const reportHTML = buildReportHTML();
+      const blob = new Blob([reportHTML], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); 
+      a.href = url; 
+      a.download = `Testify_Samples_AI_Report_${Date.now().toString().slice(-6)}.html`;
+      document.body.appendChild(a); 
+      a.click(); 
+      a.remove(); 
+      URL.revokeObjectURL(url);
+      
+      downloadFromModal.textContent = 'Downloaded ✓';
+      setTimeout(() => {
+        downloadFromModal.textContent = 'Download PDF';
+        hideReportPreview();
+      }, 1500);
+    });
+
+    downloadBtn.addEventListener('click', ()=>{
+      if(!paid){ showNotification('Please complete payment to download your AI-enhanced report.', 'error'); return; }
+      showReportPreview();
+    });
+
+    // Login System
+    const loginBtn = document.getElementById('loginBtn');
+    const profileBtn = document.getElementById('profileBtn');
+    const loginDropdown = document.getElementById('loginDropdown');
+    const profileDropdown = document.getElementById('profileDropdown');
+    const researcherLogin = document.getElementById('researcherLogin');
+    const labLogin = document.getElementById('labLogin');
+    const mobileResearcherLogin = document.getElementById('mobileResearcherLogin');
+    const mobileLabLogin = document.getElementById('mobileLabLogin');
+    const logoutBtn = document.getElementById('logoutBtn');
+    
+    let isLoggedIn = false;
+    let userType = null;
+
+    // Login dropdown toggle
+    loginBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      loginDropdown.classList.toggle('hidden');
+      profileDropdown.classList.add('hidden');
+    });
+
+    // Profile dropdown toggle
+    profileBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      profileDropdown.classList.toggle('hidden');
+      loginDropdown.classList.add('hidden');
+    });
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', () => {
+      loginDropdown.classList.add('hidden');
+      profileDropdown.classList.add('hidden');
+    });
+
+    // Prevent dropdowns from closing when clicking inside
+    loginDropdown?.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+    
+    profileDropdown?.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+
+    // Logout functionality
+    logoutBtn?.addEventListener('click', () => {
+      isLoggedIn = false;
+      userType = null;
+      loginBtn.classList.remove('hidden');
+      profileBtn.classList.add('hidden');
+      profileDropdown.classList.add('hidden');
+      
+      // Close any open dashboards
+      hideModal(researcherDashboard);
+      hideModal(labDashboard);
+    });
+
+    // Modal functionality
+    const researcherModal = document.getElementById('researcherModal');
+    const labModal = document.getElementById('labModal');
+    const labDashboard = document.getElementById('labDashboard');
+    const researcherDashboard = document.getElementById('researcherDashboard');
+
+    function showModal(modal) {
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function hideModal(modal) {
+      modal.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Login button handlers
+    researcherLogin?.addEventListener('click', () => {
+      loginDropdown.classList.add('hidden');
+      showModal(researcherModal);
+    });
+
+    labLogin?.addEventListener('click', () => {
+      loginDropdown.classList.add('hidden');
+      showModal(labModal);
+    });
+
+    mobileResearcherLogin?.addEventListener('click', () => {
+      mobileMenu.classList.add('hidden');
+      showModal(researcherModal);
+    });
+
+    mobileLabLogin?.addEventListener('click', () => {
+      mobileMenu.classList.add('hidden');
+      showModal(labModal);
+    });
+
+    // Close modal handlers
+    document.getElementById('closeResearcherModal')?.addEventListener('click', () => hideModal(researcherModal));
+    document.getElementById('closeLabModal')?.addEventListener('click', () => hideModal(labModal));
+    document.getElementById('closeDashboard')?.addEventListener('click', () => hideModal(labDashboard));
+    document.getElementById('closeResearcherDashboard')?.addEventListener('click', () => hideModal(researcherDashboard));
+
+    // Login form handlers
+    document.getElementById('researcherLoginForm')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      // Set logged in state
+      isLoggedIn = true;
+      userType = 'researcher';
+      
+      // Switch to profile view
+      loginBtn.classList.add('hidden');
+      profileBtn.classList.remove('hidden');
+      
+      // Close modal and stay on main page
+      hideModal(researcherModal);
+    });
+
+    document.getElementById('labLoginForm')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      hideModal(labModal);
+      showModal(labDashboard);
+    });
+
+    // Dashboard tab switching
+    const ordersTab = document.getElementById('ordersTab');
+    const historyTab = document.getElementById('historyTab');
+    const payoutsTab = document.getElementById('payoutsTab');
+    const ordersContent = document.getElementById('ordersContent');
+    const historyContent = document.getElementById('historyContent');
+    const payoutsContent = document.getElementById('payoutsContent');
+
+    function switchTab(activeTab, activeContent) {
+      // Reset all tabs
+      [ordersTab, historyTab, payoutsTab].forEach(tab => {
+        tab.classList.remove('btn-primary');
+        tab.classList.add('btn-soft');
+      });
+      
+      // Reset all content
+      [ordersContent, historyContent, payoutsContent].forEach(content => {
+        content.classList.add('hidden');
+      });
+
+      // Activate selected tab and content
+      activeTab.classList.remove('btn-soft');
+      activeTab.classList.add('btn-primary');
+      activeContent.classList.remove('hidden');
+    }
+
+    ordersTab?.addEventListener('click', () => switchTab(ordersTab, ordersContent));
+    historyTab?.addEventListener('click', () => switchTab(historyTab, historyContent));
+    payoutsTab?.addEventListener('click', () => switchTab(payoutsTab, payoutsContent));
+
+    // Upload results functionality
+    document.getElementById('uploadResult1')?.addEventListener('click', function() {
+      this.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg>Uploaded ✓';
+      this.classList.remove('btn-primary');
+      this.classList.add('bg-green-500', 'hover:bg-green-600');
+      this.disabled = true;
+      
+      // Show PDF download in researcher dashboard
+      setTimeout(() => {
+        document.getElementById('pdfDownload1').classList.remove('hidden');
+      }, 1000);
+    });
+
+    document.getElementById('uploadResult2')?.addEventListener('click', function() {
+      this.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg>Uploaded ✓';
+      this.classList.remove('btn-primary');
+      this.classList.add('bg-green-500', 'hover:bg-green-600');
+      this.disabled = true;
+      
+      // Show PDF download in researcher dashboard
+      setTimeout(() => {
+        document.getElementById('pdfDownload2').classList.remove('hidden');
+      }, 1000);
+    });
+
+    // Close modals when clicking outside
+    [researcherModal, labModal, labDashboard, researcherDashboard].forEach(modal => {
+      modal?.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          hideModal(modal);
+        }
+      });
+    });
+
+    // Footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Initialize Google Maps when page loads
+    window.addEventListener('load', () => {
+      if (typeof google !== 'undefined' && google.maps) {
+        initMap();
+      }
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99b5b6f886823a3f',t:'MTc2MjYxMTY2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
